@@ -19,13 +19,29 @@ and open the template in the editor.
         $errors = array();
         
         if (isPostRequest() ) {
-        if ( filter_var($site, FILTER_VALIDATE_URL) !== false  ){
-            $errors[] = 'Site URL not valud';
+        if ( filter_var($site, FILTER_VALIDATE_URL) === false  ){
+            $errors[] = 'Site URL not valid';
         }
         
-        if(count($errors)==0)
+        if(count($errors)=== 0)
         {
+            $html = getPageContent($site);
             
+            if(!empty($html)) 
+            {
+                $siteLinks = getLinkMatches($html);
+                $funcOutput = dbInsertSites($site, $siteLinks);
+                if ($funcOutput === true){
+                    ?><h2>Site successfully added: <?php echo $site ?></h2>
+                      <?php
+                }
+                else{
+                    ?><h2>Error, sites not added</h2><?php
+                }
+
+                
+            }
+            //var_dump($output);
         }
         }
         ?>

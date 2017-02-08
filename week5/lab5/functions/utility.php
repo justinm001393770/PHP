@@ -33,3 +33,43 @@ function getPageContent($url){
             
             return $output;
         }
+        
+     /*
+      *A method to collect all the thinks from an HTML string 
+      * @return Array
+      */   
+function getLinkMatches($html) {
+    $linkRegex = '/(https?:\/\/[\da-z\.-]+\.[a-z\.]{2,6}[\/\w \.-]+)/';
+    
+    preg_match_all($linkRegex, $html, $linkMatches);
+    $removeDuplicateLinks = array_unique($linkMatches[0]);
+    
+    return $removeDuplicateLinks;
+}
+
+function dbInsertSites($site, $siteLinks)
+{
+                   
+                $db = dbconnect();
+                $stmt = $db->prepare('INSERT INTO sites SET date = now(), site = :site');
+                $binds = array(":site" => $site);
+                
+                if($stmt->execute($binds) && $stmt->rowCount() > 0)
+                {
+                    $site_id = $db->lastInsertId();
+                    
+                    $stmt = $db->prepare('INSERT INTO sitelinks SET site_id = :site_id, link = :link');
+                    
+                    foreach ($siteLinks as $link)
+                    {
+                        $binds = array("site_id" => $site_id, ":link"=>$link);
+                        $stmt->execute($binds);
+                    }
+                    return true;
+                    
+                }
+                else
+                {
+                    return false;
+                }
+}
