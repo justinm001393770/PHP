@@ -7,6 +7,7 @@
     <body>
         <?php
         // put your code here
+        session_start();
         include './functions/dbconnect.php';
         include './functions/users.php';
         include './functions/until.php';

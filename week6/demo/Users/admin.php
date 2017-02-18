@@ -10,9 +10,12 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
-        <h2>This is an admin page</h2>
-        <?php
-        // put your code here
+        <?php include './templates/access_required.php'; 
+        include './functions/dbconnect.php';
+        include './functions/crud.php';
         ?>
+        <a href="crud-products/crud-products.php">Manage Products</a>
+        <a href="crud-categories/crud-categories.php">Manage Categories</a>
+        
     </body>
 </html>
