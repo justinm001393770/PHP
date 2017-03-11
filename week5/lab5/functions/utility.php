@@ -73,3 +73,14 @@ function dbInsertSites($site, $siteLinks)
                     return false;
                 }
 }
+function checkUnique($site) {
+                $db = dbconnect();
+                $stmt = $db->prepare('SELECT * FROM sites WHERE site = :site');
+                $binds = array(":site" => $site);
+                if($stmt->execute($binds) && $stmt->rowCount() === 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+}
